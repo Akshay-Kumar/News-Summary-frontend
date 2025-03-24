@@ -8,9 +8,11 @@ function Logout() {
     useEffect(() => {
         // Remove the token from localStorage to log the user out
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         // Optionally, if your backend supports a logout endpoint, you can call it here.
         // Then navigate to the login page.
         navigate('/login');
+        window.location.reload();
     }, [navigate]);
 
     return (

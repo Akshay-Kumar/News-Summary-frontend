@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 const news_api_url = process.env.REACT_APP_API_URL;
+
 function Login() {
     const [email, setEmail]       = useState('');
     const [password, setPassword] = useState('');
@@ -12,8 +13,14 @@ function Login() {
         e.preventDefault();
         try {
             const res = await axios.post(`${news_api_url}/api/auth/login`, { email, password });
+
+            // Store token and user details in localStorage
             localStorage.setItem('token', res.data.token);
+            if (res.data.user) {
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+            }
             navigate('/');
+            window.location.reload();
         } catch (error) {
             alert('Invalid credentials');
             console.error('Login error:', error);

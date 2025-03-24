@@ -1,0 +1,101 @@
+/* Define custom properties for theme colors and styling */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #ecf0f1;
+    --accent-color: #e74c3c;
+    --background-color: #ffffff;
+    --text-color: #333333;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Global reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Article Card container */
+.article-card {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px var(--card-shadow);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 1rem;
+}
+
+.article-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Adjusted image styling: smaller height */
+.article-card img.article-image {
+    width: 100%;
+    height: 150px; /* Reduced height for a smaller image */
+    object-fit: cover;
+    display: block;
+}
+
+/* Article content container */
+.article-content {
+    padding: 1rem;
+}
+
+/* Header section with title and bookmark button */
+.article-content .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Article title styling */
+.article-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+/* Bookmark button styling */
+.bookmark-btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.bookmark-btn:hover {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+/* Article summary styling */
+.article-summary {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin: 1rem 0;
+}
+
+/* Read More button styling */
+.read-more {
+    background-color: var(--accent-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.read-more:hover {
+    background-color: #c0392b;
+}

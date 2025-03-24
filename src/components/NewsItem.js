@@ -1,8 +1,19 @@
 // src/components/NewsItem.js
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import ArticleCard from './ArticleCard';
+
 const news_api_url = process.env.REACT_APP_API_URL;
+
 function NewsItem({ article }) {
+    const [isBookmarked, setIsBookmarked] = useState(false);
+
+    const handleReadMore = (link) => {
+        // You can use react-router's history.push(link) if using react-router,
+        // otherwise, this navigates using window.location
+        window.location.href = link;
+    };
+
     const handleBookmark = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -15,6 +26,7 @@ function NewsItem({ article }) {
                 { article },
                 { headers: { 'x-auth-token': token } }
             );
+            setIsBookmarked(true);
             alert('Article bookmarked!');
         } catch (error) {
             console.error('Bookmark error:', error);
@@ -23,14 +35,16 @@ function NewsItem({ article }) {
     };
 
     return (
-        <div style={{ border: '1px solid gray', padding: '1rem', margin: '1rem 0' }}>
-            <h2>{article.title}</h2>
-            <p>{article.summary}</p>
-            <a href={article.url} target="_blank" rel="noopener noreferrer">
-                Read More
-            </a>
-            <br />
-            <button onClick={handleBookmark}>Bookmark</button>
+        <div className="news-container">
+            <ArticleCard
+                key={article.id}
+                image={article.urlToImage}
+                title={article.title}
+                summary={article.summary}
+                onReadMore={() => handleReadMore(article.url)}
+                onBookmark={handleBookmark}
+                bookmarked={isBookmarked}
+            />
         </div>
     );
 }
