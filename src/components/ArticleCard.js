@@ -15,14 +15,16 @@ const ArticleCard = ({
             <div className="article-content">
                 <div className="header">
                     <h2 className="article-title">{title}</h2>
+                </div>
+                <p className="article-summary">{summary}</p>
+                <div className="button-container">
+                    <button className="read-more" onClick={onReadMore}>
+                        Read More
+                    </button>
                     <button className="bookmark-btn" onClick={onBookmark}>
                         {bookmarked ? 'Bookmarked' : 'Bookmark'}
                     </button>
                 </div>
-                <p className="article-summary">{summary}</p>
-                <button className="read-more" onClick={onReadMore}>
-                    Read More
-                </button>
             </div>
         </div>
     );

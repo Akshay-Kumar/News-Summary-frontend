@@ -9,9 +9,7 @@ function NewsItem({ article }) {
     const [isBookmarked, setIsBookmarked] = useState(false);
 
     const handleReadMore = (link) => {
-        // You can use react-router's history.push(link) if using react-router,
-        // otherwise, this navigates using window.location
-        window.location.href = link;
+        window.open(link, '_blank', 'noopener,noreferrer');
     };
 
     const handleBookmark = async () => {
