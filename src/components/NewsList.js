@@ -16,16 +16,21 @@ function NewsList() {
     const category = query.get('category') || 'general';
     const country = query.get('country');
     const source = query.get('source');
+    const language = query.get('language');
 
     useEffect(() => {
         async function fetchNews() {
             try {
-                let url = `${news_api_url}/api/news?category=${category}`;
+                //let url = `${news_api_url}/api/news?category=${category}`;
+                let url = `${news_api_url}/api/newsdata?category=${category}`;
                 if (country) {
                     url += `&country=${country}`;
                 }
                 if (source) {
                     url += `&source=${source}`;
+                }
+                if (language) {
+                    url += `&language=${language}`;
                 }
                 const res = await axios.get(url);
                 setArticles(res.data);

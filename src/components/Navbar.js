@@ -77,9 +77,14 @@ function Navbar() {
                     >
                         <option value="">Select Source</option>
                         <option value="cnn">CNN</option>
-                        <option value="bbc-news">BBC News</option>
-                        <option value="the-verge">The Verge</option>
+                        <option value="bbc">BBC News</option>
+                        <option value="theverge">The Verge</option>
                         <option value="techcrunch">TechCrunch</option>
+                        <option value="nytimes">New York Times</option>
+                        <option value="foxnews">Fox News</option>
+                        <option value="ndtv">NDTV News</option>
+                        <option value="cbc">CBC News</option>
+                        <option value="reuters">Reuters</option>
                     </select>
                     <button type="submit" className="filter-btn">Filter</button>
                 </form>
