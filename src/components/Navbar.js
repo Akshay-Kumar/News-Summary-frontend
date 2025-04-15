@@ -17,17 +17,24 @@ function Navbar() {
     const handleCountryChange = (e) => {
         setCountry(e.target.value);
         // Clear source selection if a country is chosen
+
+        /* uncomment if using newsapi.org */
+        /*
         if (e.target.value) {
             setSource('');
         }
+        */
     };
 
     const handleSourceChange = (e) => {
         setSource(e.target.value);
         // Clear country selection if a source is chosen
+        /* uncomment if using newsapi.org */
+        /*
         if (e.target.value) {
             setCountry('');
         }
+        */
     };
 
     // Build a query string and navigate on form submit
@@ -53,6 +60,9 @@ function Navbar() {
                 <Link to="/?category=politics">Politics</Link>
                 <Link to="/?category=entertainment">Entertainment</Link>
                 <Link to="/?category=sports">Sports</Link>
+                <Link to="/?category=business">Business</Link>
+                <Link to="/?category=education">Education</Link>
+                <Link to="/?category=health">Health</Link>
             </div>
             <div className="filters">
                 {/* Filter Dropdowns for Country and Source */}
@@ -61,7 +71,8 @@ function Navbar() {
                         className="custom-select"
                         value={country}
                         onChange={handleCountryChange}
-                        disabled={source !== ''}
+                        /* uncomment if using newsapi.org */
+                        /* disabled={source !== ''} */
                     >
                         <option value="">Select Country</option>
                         <option value="us">United States</option>
@@ -73,7 +84,8 @@ function Navbar() {
                         className="custom-select"
                         value={source}
                         onChange={handleSourceChange}
-                        disabled={country !== ''}
+                        /* uncomment if using newsapi.org */
+                        /* disabled={country !== ''} */
                     >
                         <option value="">Select Source</option>
                         <option value="cnn">CNN</option>
@@ -86,7 +98,7 @@ function Navbar() {
                         <option value="cbc">CBC News</option>
                         <option value="reuters">Reuters</option>
                     </select>
-                    <button type="submit" className="filter-btn">Filter</button>
+                    <button type="submit" className="filter-btn">Search</button>
                 </form>
             </div>
             <div className="auth-links">

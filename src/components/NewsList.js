@@ -16,7 +16,7 @@ function NewsList() {
     const category = query.get('category') || 'general';
     const country = query.get('country');
     const source = query.get('source');
-    const language = query.get('language');
+    const language = query.get('language') || 'en';
 
     useEffect(() => {
         async function fetchNews() {
