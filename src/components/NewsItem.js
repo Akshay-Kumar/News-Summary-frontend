@@ -2,14 +2,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ArticleCard from './ArticleCard';
+import ArticleModal from './ArticleModal';
 
 const news_api_url = process.env.REACT_APP_API_URL;
 
 function NewsItem({ article }) {
     const [isBookmarked, setIsBookmarked] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
-    const handleReadMore = (link) => {
-        window.open(link, '_blank', 'noopener,noreferrer');
+    const handleReadMore = () => {
+        setShowModal(true);
     };
 
     const handleBookmark = async () => {
@@ -32,6 +34,10 @@ function NewsItem({ article }) {
         }
     };
 
+    const handleReadFullArticle = (link) => {
+        window.open(link, '_blank', 'noopener,noreferrer');
+    };
+
     return (
         <div className="news-container">
             <ArticleCard
@@ -39,10 +45,17 @@ function NewsItem({ article }) {
                 image={article.urlToImage}
                 title={article.title}
                 summary={article.summary}
-                onReadMore={() => handleReadMore(article.url)}
+                onReadMore={handleReadMore}
                 onBookmark={handleBookmark}
                 bookmarked={isBookmarked}
             />
+            {showModal && (
+                <ArticleModal
+                    article={article}
+                    onClose={() => setShowModal(false)}
+                    onReadFullArticle={() => handleReadFullArticle(article.url)}
+                />
+            )}
         </div>
     );
 }
