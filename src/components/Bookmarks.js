@@ -1,7 +1,9 @@
-// src/components/Bookmarks.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Bookmarks.css'; // Import the CSS file
+
 const news_api_url = process.env.REACT_APP_API_URL;
+
 function Bookmarks() {
     const [bookmarks, setBookmarks] = useState([]);
 
@@ -23,8 +25,9 @@ function Bookmarks() {
 
     const handleDelete = async (id) => {
         const token = localStorage.getItem('token');
+        const api_url = `${process.env.SERVER_URL}/api/bookmarks/${id}`;
         try {
-            await axios.delete(`${process.env.SERVER_URL}/api/bookmarks/${id}`, {
+            await axios.delete(`${news_api_url}/api/bookmarks/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             setBookmarks(bookmarks.filter((bookmark) => bookmark._id !== id));
@@ -34,13 +37,13 @@ function Bookmarks() {
     };
 
     return (
-        <div style={{ padding: '1rem' }}>
+        <div className="bookmarks-container">
             <h2>Your Bookmarks</h2>
             {bookmarks.length === 0 ? (
                 <p>No bookmarks available.</p>
             ) : (
                 bookmarks.map((bookmark) => (
-                    <div key={bookmark._id} style={{ border: '1px solid gray', padding: '1rem', margin: '1rem 0' }}>
+                    <div key={bookmark._id} className="bookmark-item">
                         <h3>{bookmark.article.title}</h3>
                         <p>{bookmark.article.description}</p>
                         <a href={bookmark.article.url} target="_blank" rel="noopener noreferrer">
