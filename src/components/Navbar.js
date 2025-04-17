@@ -12,6 +12,11 @@ function Navbar() {
     const handleCountryChange = (e) => setCountry(e.target.value);
     const handleSourceChange = (e) => setSource(e.target.value);
 
+    const handleBrandClick = () => {
+        setMenuOpen(false); // optional: close hamburger if on mobile
+        navigate('/');
+    };
+
     const handleFilterSubmit = (e) => {
         e.preventDefault();
         let query = '?';
@@ -27,7 +32,9 @@ function Navbar() {
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="brand-and-toggle">
-                    <span className="navbar-brand">NewsApp</span>
+                    <div className="navbar-brand" onClick={handleBrandClick} style={{ cursor: 'pointer' }}>
+                        News Summary
+                    </div>
                     <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>☰</button>
                 </div>
 
