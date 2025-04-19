@@ -23,7 +23,12 @@ const ArticleCard = ({
                             Read More
                         </button>
                     */}
-                    <button className="bookmark-btn" onClick={onBookmark}>
+                    <button className="bookmark-btn" onClick={
+                        (e) => {
+                            e.stopPropagation(); // 👈 Prevent modal open
+                            onBookmark();
+                        }
+                    }>
                         {bookmarked ? 'Bookmarked' : 'Bookmark'}
                     </button>
                 </div>
