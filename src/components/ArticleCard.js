@@ -10,7 +10,7 @@ const ArticleCard = ({
                          bookmarked,
                      }) => {
     return (
-        <div className="article-card">
+        <div className="article-card" onClick={onReadMore}>
             {image && <img className="article-image" src={image} alt={title} />}
             <div className="article-content">
                 <div className="header">
@@ -18,9 +18,11 @@ const ArticleCard = ({
                 </div>
                 <p className="article-summary">{summary}</p>
                 <div className="button-container">
-                    <button className="read-more" onClick={onReadMore}>
-                        Read More
-                    </button>
+                    {/*
+                        <button className="read-more" onClick={onReadMore}>
+                            Read More
+                        </button>
+                    */}
                     <button className="bookmark-btn" onClick={onBookmark}>
                         {bookmarked ? 'Bookmarked' : 'Bookmark'}
                     </button>

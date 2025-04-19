@@ -1,13 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
 function Navbar() {
     const [country, setCountry] = useState('');
     const [source, setSource] = useState('');
+    const [user, setUser] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user'));
+    //const user = JSON.parse(localStorage.getItem('user'));
+
+    useEffect(() => {
+        async function fetchToken() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                setUser(user);
+            } catch (error) {
+                console.error('Error fetching token:', error);
+            }
+        }
+        fetchToken();
+    }, []);
 
     const handleCountryChange = (e) => setCountry(e.target.value);
     const handleSourceChange = (e) => setSource(e.target.value);

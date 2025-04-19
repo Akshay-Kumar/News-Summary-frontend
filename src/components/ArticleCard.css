@@ -23,6 +23,7 @@
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     margin: 1rem;
+    cursor: pointer;
 }
 
 .article-card:hover {
@@ -56,6 +57,7 @@
     font-weight: 600;
     color: var(--primary-color);
     margin: 0;
+    font-family: inherit;
 }
 
 /* Bookmark button styling */
@@ -82,6 +84,7 @@
     line-height: 1.6;
     color: var(--text-color);
     margin: 1rem 0;
+    font-family: inherit;
 }
 
 /* New styles for button layout */

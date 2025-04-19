@@ -2,7 +2,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Auth.css'; // Shared auth styles
+
 const news_api_url = process.env.REACT_APP_API_URL;
+
 function Register() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -33,63 +36,50 @@ function Register() {
     };
 
     return (
-        <div className="form-container">
-            <h2>Register</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>First Name:</label>
+        <div className="auth-container">
+            <div className="auth-card">
+                <h2>Register</h2>
+                <form onSubmit={handleSubmit}>
                     <input
                         type="text"
+                        placeholder="First Name"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label>Last Name:</label>
                     <input
                         type="text"
+                        placeholder="Last Name"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label>Email:</label>
                     <input
                         type="email"
+                        placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
                     <input
                         type="password"
+                        placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label>Role:</label>
                     <select
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                         required
                     >
-                        <option value="role" disabled>
-                            Select role
-                        </option>
+                        <option value="role" disabled>Select Role</option>
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
                     </select>
-                </div>
-                <button type="submit" className="btn-submit">
-                    Register
-                </button>
-            </form>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
         </div>
     );
 }

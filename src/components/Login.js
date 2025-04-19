@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import './Auth.css'; // Shared auth styles
+
 const news_api_url = process.env.REACT_APP_API_URL;
 
 function Login() {
@@ -28,32 +30,30 @@ function Login() {
     };
 
     return (
-        <div className="form-container">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Email:</label>
+        <div className="auth-container">
+            <div className="auth-card">
+                <h2>Login</h2>
+                <form onSubmit={handleSubmit}>
                     <input
                         type="email"
+                        placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
                     <input
                         type="password"
+                        placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                </div>
-                <button type="submit" className="btn-submit">Login</button>
-                <div className="forgot-password">
-                    <Link to="/forgot-password">Forgot Password?</Link>
-                </div>
-            </form>
+                    <button type="submit">Login</button>
+                    <div className="link-row">
+                        <Link to="/forgot-password">Forgot Password?</Link>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
