@@ -84,6 +84,7 @@ function Navbar() {
                             <option value="ndtv">NDTV News</option>
                             <option value="cbc">CBC News</option>
                             <option value="reuters">Reuters</option>
+                            <option value="aljazeera">Aljazeera</option>
                         </select>
                         <button className="filter-btn" type="submit">Search</button>
                     </form>
