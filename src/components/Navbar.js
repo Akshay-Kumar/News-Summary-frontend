@@ -7,11 +7,12 @@ function Navbar() {
     const [source, setSource] = useState('');
     const [user, setUser] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
+    const [countries, setCountries] = useState([]);
+    const [sources, setSources] = useState([]);
     const navigate = useNavigate();
-    //const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
-        async function fetchToken() {
+        async function fetchData() {
             const token = localStorage.getItem('token');
             if (!token) return;
             try {
@@ -21,14 +22,45 @@ function Navbar() {
                 console.error('Error fetching token:', error);
             }
         }
-        fetchToken();
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        async function fetchDropdownData() {
+            try {
+                const response = await fetch('/dropdown-data.xml');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "application/xml");
+
+                const countryElements = xml.getElementsByTagName('country');
+                const sourceElements = xml.getElementsByTagName('source');
+
+                const countriesArray = Array.from(countryElements).map(c => ({
+                    code: c.getAttribute('code'),
+                    name: c.textContent
+                }));
+
+                const sourcesArray = Array.from(sourceElements).map(s => ({
+                    code: s.getAttribute('code'),
+                    name: s.textContent
+                }));
+
+                setCountries(countriesArray);
+                setSources(sourcesArray);
+
+            } catch (error) {
+                console.error('Error loading dropdown data:', error);
+            }
+        }
+        fetchDropdownData();
     }, []);
 
     const handleCountryChange = (e) => setCountry(e.target.value);
     const handleSourceChange = (e) => setSource(e.target.value);
 
     const handleBrandClick = () => {
-        setMenuOpen(false); // optional: close hamburger if on mobile
+        setMenuOpen(false);
         navigate('/');
     };
 
@@ -55,6 +87,7 @@ function Navbar() {
 
                 <div className={`nav-sections ${menuOpen ? 'open' : ''}`}>
                     <div className="nav-links">
+                        {/* Keep your hardcoded links if you want */}
                         <Link to="/" onClick={closeMenu}>Top News</Link>
                         <Link to="/?category=technology" onClick={closeMenu}>Technology</Link>
                         <Link to="/?category=politics" onClick={closeMenu}>Politics</Link>
@@ -68,23 +101,15 @@ function Navbar() {
                     <form className="filter-form" onSubmit={handleFilterSubmit}>
                         <select value={country} onChange={handleCountryChange} className="custom-select">
                             <option value="">Country</option>
-                            <option value="us">USA</option>
-                            <option value="gb">UK</option>
-                            <option value="in">India</option>
-                            <option value="ca">Canada</option>
+                            {countries.map((c, idx) => (
+                                <option key={idx} value={c.code}>{c.name}</option>
+                            ))}
                         </select>
                         <select value={source} onChange={handleSourceChange} className="custom-select">
                             <option value="">Source</option>
-                            <option value="cnn">CNN</option>
-                            <option value="bbc">BBC News</option>
-                            <option value="theverge">The Verge</option>
-                            <option value="techcrunch">TechCrunch</option>
-                            <option value="nytimes">New York Times</option>
-                            <option value="foxnews">Fox News</option>
-                            <option value="ndtv">NDTV News</option>
-                            <option value="cbc">CBC News</option>
-                            <option value="reuters">Reuters</option>
-                            <option value="aljazeera">Aljazeera</option>
+                            {sources.map((s, idx) => (
+                                <option key={idx} value={s.code}>{s.name}</option>
+                            ))}
                         </select>
                         <button className="filter-btn" type="submit">Search</button>
                     </form>
