@@ -9,6 +9,7 @@ function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [countries, setCountries] = useState([]);
     const [sources, setSources] = useState([]);
+    const [links, setLinks] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -56,6 +57,29 @@ function Navbar() {
         fetchDropdownData();
     }, []);
 
+    useEffect(() => {
+        async function fetchLinks() {
+            try {
+                const response = await fetch('/links.xml');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "application/xml");
+
+                const linkElements = xml.getElementsByTagName('link');
+                const linksArray = Array.from(linkElements).map(link => ({
+                    name: link.getElementsByTagName('name')[0].textContent,
+                    path: link.getElementsByTagName('path')[0].textContent,
+                }));
+
+                setLinks(linksArray);
+            } catch (error) {
+                console.error('Error loading links:', error);
+            }
+        }
+
+        fetchLinks();
+    }, []);
+
     const handleCountryChange = (e) => setCountry(e.target.value);
     const handleSourceChange = (e) => setSource(e.target.value);
 
@@ -87,15 +111,11 @@ function Navbar() {
 
                 <div className={`nav-sections ${menuOpen ? 'open' : ''}`}>
                     <div className="nav-links">
-                        {/* Keep your hardcoded links if you want */}
-                        <Link to="/" onClick={closeMenu}>Top News</Link>
-                        <Link to="/?category=technology" onClick={closeMenu}>Technology</Link>
-                        <Link to="/?category=politics" onClick={closeMenu}>Politics</Link>
-                        <Link to="/?category=entertainment" onClick={closeMenu}>Entertainment</Link>
-                        <Link to="/?category=sports" onClick={closeMenu}>Sports</Link>
-                        <Link to="/?category=business" onClick={closeMenu}>Business</Link>
-                        <Link to="/?category=education" onClick={closeMenu}>Education</Link>
-                        <Link to="/?category=health" onClick={closeMenu}>Health</Link>
+                        {links.map((link, idx) => (
+                            <Link key={idx} to={link.path} onClick={closeMenu}>
+                                {link.name}
+                            </Link>
+                        ))}
                     </div>
 
                     <form className="filter-form" onSubmit={handleFilterSubmit}>

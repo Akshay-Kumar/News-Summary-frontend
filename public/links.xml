@@ -1,0 +1,34 @@
+<links>
+    <link>
+        <name>Top News</name>
+        <path>/</path>
+    </link>
+    <link>
+        <name>Technology</name>
+        <path>/?category=technology</path>
+    </link>
+    <link>
+        <name>Politics</name>
+        <path>/?category=politics</path>
+    </link>
+    <link>
+        <name>Entertainment</name>
+        <path>/?category=entertainment</path>
+    </link>
+    <link>
+        <name>Sports</name>
+        <path>/?category=sports</path>
+    </link>
+    <link>
+        <name>Business</name>
+        <path>/?category=business</path>
+    </link>
+    <link>
+        <name>Education</name>
+        <path>/?category=education</path>
+    </link>
+    <link>
+        <name>Health</name>
+        <path>/?category=health</path>
+    </link>
+</links>

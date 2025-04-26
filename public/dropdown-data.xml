@@ -25,10 +25,10 @@
         <source code="thehindu">The Hindu</source>
         <source code="livemint">Mint</source>
         <source code="hindustantimes">Hindustan Times</source>
-        <source code="indianexpress">Indian Express</source>
+        <!-- <source code="indianexpress">Indian Express</source> -->
         <source code="indiatoday">India Today</source>
         <source code="cbc">CBC News</source>
-        <source code="reuters">Reuters</source>
-        <source code="aljazeera">Aljazeera</source>
+        <!-- <source code="reuters">Reuters</source> -->
+        <!-- <source code="aljazeera">Aljazeera</source> -->
     </sources>
 </dropdowns>
