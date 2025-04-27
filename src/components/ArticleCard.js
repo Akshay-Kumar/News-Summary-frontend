@@ -8,6 +8,8 @@ const ArticleCard = ({
                          onReadMore,
                          onBookmark,
                          bookmarked,
+                         sourceName,
+                         sourceIcon
                      }) => {
     return (
         <div className="article-card" onClick={onReadMore}>
@@ -18,11 +20,16 @@ const ArticleCard = ({
                 </div>
                 <p className="article-summary">{summary}</p>
                 <div className="button-container">
-                    {/*
-                        <button className="read-more" onClick={onReadMore}>
-                            Read More
-                        </button>
-                    */}
+                    {/* --- Source Info Block --- */}
+                    {(sourceName || sourceIcon) && (
+                        <div className="source-info" onClick={(e) => e.stopPropagation()}>
+                            {sourceIcon && (
+                                <img src={sourceIcon} alt={sourceName} className="source-icon" />
+                            )}
+                            {sourceName && <span className="source-name">{sourceName}</span>}
+                        </div>
+                    )}
+                    {/* --- Source Info Block --- */}
                     <button className="bookmark-btn" onClick={
                         (e) => {
                             e.stopPropagation(); // 👈 Prevent modal open

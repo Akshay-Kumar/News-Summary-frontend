@@ -109,3 +109,37 @@
     background-color: var(--primary-color);
     color: var(--secondary-color);
 }
+
+/* --- 🔥 NEW SOURCE INFO STYLING --- */
+/* Bottom container holding source info and bookmark button */
+.bottom-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+/* Source info styling (aligned right now) */
+.source-info {
+    display: flex;
+    align-items: center;
+}
+
+/* Source icon */
+.source-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 6px;
+    border: 1px solid var(--primary-color);
+}
+
+/* Source name */
+.source-name {
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-family: inherit;
+}
+

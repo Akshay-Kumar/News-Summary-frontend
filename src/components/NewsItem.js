@@ -45,6 +45,8 @@ function NewsItem({ article }) {
                 image={article.urlToImage}
                 title={article.title}
                 summary={article.summary}
+                sourceName={article.source_name}
+                sourceIcon={article.source_icon}
                 onReadMore={handleReadMore}
                 onBookmark={handleBookmark}
                 bookmarked={isBookmarked}
