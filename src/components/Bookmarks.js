@@ -25,7 +25,6 @@ function Bookmarks() {
 
     const handleDelete = async (id) => {
         const token = localStorage.getItem('token');
-        const api_url = `${process.env.SERVER_URL}/api/bookmarks/${id}`;
         try {
             await axios.delete(`${news_api_url}/api/bookmarks/${id}`, {
                 headers: { 'x-auth-token': token }
