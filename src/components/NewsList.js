@@ -50,7 +50,7 @@ function NewsList() {
                 <p>No articles available.</p>
             ) : (
                 articles.map((article, index) => (
-                    <NewsItem key={index} article={article} />
+                    <NewsItem key={index} article={{ ...article, hideBookmark: false }} />
                 ))
             )}
         </div>

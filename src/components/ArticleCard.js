@@ -1,5 +1,6 @@
+// src/components/ArticleCard.js
 import React from 'react';
-import './ArticleCard.css'; // Ensure the correct path
+import './ArticleCard.css';
 
 const ArticleCard = ({
                          image,
@@ -9,7 +10,9 @@ const ArticleCard = ({
                          onBookmark,
                          bookmarked,
                          sourceName,
-                         sourceIcon
+                         sourceIcon,
+                         hideBookmark,
+                         bottomRightButtons
                      }) => {
     return (
         <div className="article-card" onClick={onReadMore}>
@@ -20,7 +23,6 @@ const ArticleCard = ({
                 </div>
                 <p className="article-summary">{summary}</p>
                 <div className="button-container">
-                    {/* --- Source Info Block --- */}
                     {(sourceName || sourceIcon) && (
                         <div className="source-info" onClick={(e) => e.stopPropagation()}>
                             {sourceIcon && (
@@ -29,16 +31,25 @@ const ArticleCard = ({
                             {sourceName && <span className="source-name">{sourceName}</span>}
                         </div>
                     )}
-                    {/* --- Source Info Block --- */}
-                    <button className="bookmark-btn" onClick={
-                        (e) => {
-                            e.stopPropagation(); // 👈 Prevent modal open
-                            onBookmark();
-                        }
-                    }>
-                        {bookmarked ? 'Bookmarked' : 'Bookmark'}
-                    </button>
+                    {!hideBookmark && (
+                        <button
+                            className="bookmark-btn"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onBookmark();
+                            }}
+                        >
+                            {bookmarked ? 'Bookmarked' : 'Bookmark'}
+                        </button>
+                    )}
                 </div>
+
+                {/* Render bottomRightButtons in a container */}
+                {bottomRightButtons && (
+                    <div className="bottom-buttons">
+                        {bottomRightButtons}
+                    </div>
+                )}
             </div>
         </div>
     );

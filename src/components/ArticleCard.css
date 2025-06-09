@@ -142,4 +142,13 @@
     font-weight: 500;
     font-family: inherit;
 }
+/* Add this to your ArticleCard.css */
+
+.bottom-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
 

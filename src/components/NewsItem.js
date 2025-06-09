@@ -50,6 +50,7 @@ function NewsItem({ article }) {
                 onReadMore={handleReadMore}
                 onBookmark={handleBookmark}
                 bookmarked={isBookmarked}
+                hideBookmark={article.hideBookmark}
             />
             {showModal && (
                 <ArticleModal

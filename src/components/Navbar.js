@@ -6,19 +6,23 @@ function Navbar() {
     const [country, setCountry] = useState('');
     const [source, setSource] = useState('');
     const [user, setUser] = useState('');
+    const [token, setToken] = useState('');
+    const [userRole, setUserRole] = useState('');
     const [menuOpen, setMenuOpen] = useState(false);
     const [countries, setCountries] = useState([]);
     const [sources, setSources] = useState([]);
     const [links, setLinks] = useState([]);
     const navigate = useNavigate();
-
     useEffect(() => {
         async function fetchData() {
             const token = localStorage.getItem('token');
             if (!token) return;
             try {
                 const user = JSON.parse(localStorage.getItem('user'));
+                const userRole = user["role"];
                 setUser(user);
+                setToken(token);
+                setUserRole(userRole);
             } catch (error) {
                 console.error('Error fetching token:', error);
             }
@@ -139,6 +143,9 @@ function Navbar() {
                             <>
                                 <span className="welcome">Hi, <b>{user.email}</b></span>
                                 <Link to="/bookmarks" onClick={closeMenu}>Bookmarks</Link>
+                                {token && userRole === 'admin' && (
+                                    <Link to="/admin_worldnews" onClick={closeMenu}>Admin Panel</Link>
+                                )}
                                 <Link to="/logout" onClick={closeMenu}>Logout</Link>
                             </>
                         ) : (

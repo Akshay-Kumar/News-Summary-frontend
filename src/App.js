@@ -8,6 +8,8 @@ import Register from './components/Register';
 import ForgotPassword from './components/ForgotPassword';
 import Bookmarks from './components/Bookmarks';
 import Logout from './components/Logout';
+import AdminWorldNewsList from './components/AdminWorldNewsList';
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="/admin_worldnews" element={<AdminWorldNewsList />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </div>

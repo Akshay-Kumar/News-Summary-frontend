@@ -6,6 +6,7 @@ function ArticleModal({ article, onClose, onReadFullArticle }) {
     if (!article) return null;
 
     const handleOverlayClick = (e) => {
+        // Close modal if click outside modal-content (on overlay)
         if (e.target.classList.contains('modal-overlay')) {
             onClose();
         }
@@ -15,8 +16,10 @@ function ArticleModal({ article, onClose, onReadFullArticle }) {
         <div className="modal-overlay" onClick={handleOverlayClick}>
             <div className="modal-content">
                 <h2>{article.title}</h2>
-                <img src={article.urlToImage} alt={article.title} />
-                <p>{/* article.summary || */ article.content}</p>
+                {article.urlToImage && (
+                    <img src={article.urlToImage} alt={article.title} />
+                )}
+                <p>{article.content}</p>
                 <div className="modal-actions">
                     <button onClick={onReadFullArticle} className="modal-button">
                         Read full article
