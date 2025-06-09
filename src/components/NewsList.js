@@ -22,7 +22,9 @@ function NewsList() {
         async function fetchNews() {
             try {
                 //let url = `${news_api_url}/api/news?category=${category}`;
-                let url = `${news_api_url}/api/newsdata?category=${category}`;
+                //let url = `${news_api_url}/api/newsdata?category=${category}`;
+                //let url = `${news_api_url}/api/newsdatahub?category=${category}`;
+                let url = `${news_api_url}/api/worldnews?category=${category}`;
                 if (country) {
                     url += `&country=${country}`;
                 }

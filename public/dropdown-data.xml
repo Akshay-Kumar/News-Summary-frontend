@@ -1,10 +1,11 @@
 <!-- public/dropdown-data.xml -->
 <dropdowns>
     <countries>
-        <country code="us">USA</country>
-        <country code="gb">UK</country>
         <country code="in">India</country>
         <country code="ca">Canada</country>
+        <country code="us">USA</country>
+        <country code="ru">Russia</country>
+        <country code="gb">UK</country>
         <country code="au">Australia</country>
         <country code="de">Germany</country>
         <country code="fr">France</country>

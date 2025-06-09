@@ -16,7 +16,7 @@ function ArticleModal({ article, onClose, onReadFullArticle }) {
             <div className="modal-content">
                 <h2>{article.title}</h2>
                 <img src={article.urlToImage} alt={article.title} />
-                <p>{article.summary || article.content}</p>
+                <p>{/* article.summary || */ article.content}</p>
                 <div className="modal-actions">
                     <button onClick={onReadFullArticle} className="modal-button">
                         Read full article
