@@ -1,0 +1,159 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #ffffff;
+    --error-color: #dc3545;
+    --warning-color: #b35f00;
+    --info-color: #090909;
+    --warning-background-color: #fff3cd;
+    --info-background-color: #9ee578;
+    --error-background-color: #eaa09d;
+    --bg-light: #f8f9fa;
+    --text-dark: #212529;
+    --gray-light: #e9ecef;
+    --gray-dark: #343a40;
+}
+
+.admin-page-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.job-info p {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-dark);
+}
+
+.loading-text {
+    color: #555;
+    font-style: italic;
+}
+
+.error-text {
+    color: var(--error-color);
+    background-color: var(--error-background-color);
+    padding: 8px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+.info-text {
+    color: var(--info-color);
+    background-color: var(--info-background-color);
+    padding: 8px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+.warning-text {
+    color: var(--warning-color);
+    background-color: var(--warning-background-color);
+    padding: 8px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+.action-row {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.primary-button {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.primary-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.primary-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.job-history {
+    margin-top: 3rem;
+}
+
+.job-history h2 {
+    margin-bottom: 1rem;
+    color: var(--gray-dark);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.history-table th,
+.history-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.history-table th {
+    background-color: var(--gray-light);
+    color: var(--gray-dark);
+}
+
+.history-table tr:hover {
+    background-color: #f1f3f5;
+}
+
+.history-error {
+    color: var(--error-color);
+    font-size: 0.9rem;
+}
+
+.progress-container {
+    width: 100%;
+    height: 20px;
+    background-color: var(--gray-light);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+    border-radius: 10px 0 0 10px;
+}
+
+.progress-container p {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 0;
+    left: 0;
+    line-height: 20px;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    margin: 0;
+}

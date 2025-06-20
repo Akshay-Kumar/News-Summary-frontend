@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ArticleCard from './ArticleCard';
 import './ArticleCard.css';
 import ArticleModal from "./ArticleModal";
+import { Link } from 'react-router-dom';
 
 const news_api_url = process.env.REACT_APP_API_URL;
 
@@ -137,6 +138,19 @@ function AdminWorldNewsList() {
                 >
                     Export CSV
                 </CSVLink>
+                <Link
+                    to="/admin_job_dashboard"
+                    style={{
+                        backgroundColor: '#007bff',
+                        color: 'white',
+                        padding: '0.5rem 1rem',
+                        textDecoration: 'none',
+                        borderRadius: '5px',
+                        fontSize: '0.9rem'
+                    }}
+                >
+                    Job Dashboard
+                </Link>
             </div>
 
             {articles.length === 0 ? (

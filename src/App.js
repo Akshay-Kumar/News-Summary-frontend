@@ -9,6 +9,7 @@ import ForgotPassword from './components/ForgotPassword';
 import Bookmarks from './components/Bookmarks';
 import Logout from './components/Logout';
 import AdminWorldNewsList from './components/AdminWorldNewsList';
+import AdminJobDashboard from './components/AdminJobDashboard';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/bookmarks" element={<Bookmarks />} />
           <Route path="/admin_worldnews" element={<AdminWorldNewsList />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/admin_job_dashboard" element={<AdminJobDashboard/>}/>
         </Routes>
       </div>
   );

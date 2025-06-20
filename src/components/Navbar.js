@@ -144,7 +144,7 @@ function Navbar() {
                                 <span className="welcome">Hi, <b>{user.email}</b></span>
                                 <Link to="/bookmarks" onClick={closeMenu}>Bookmarks</Link>
                                 {token && userRole === 'admin' && (
-                                    <Link to="/admin_worldnews" onClick={closeMenu}>Admin Panel</Link>
+                                    <Link to="/admin_worldnews" onClick={closeMenu}>Dashboard</Link>
                                 )}
                                 <Link to="/logout" onClick={closeMenu}>Logout</Link>
                             </>
