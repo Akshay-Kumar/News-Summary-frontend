@@ -7,6 +7,7 @@ import ArticleCard from './ArticleCard';
 import './ArticleCard.css';
 import ArticleModal from "./ArticleModal";
 import { Link } from 'react-router-dom';
+import Spinner from './Spinner';
 
 const news_api_url = process.env.REACT_APP_API_URL;
 
@@ -21,6 +22,8 @@ function AdminWorldNewsList() {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const csvFileName = `worldnews_articles_${new Date().toISOString().replace(/[:.]/g, '-')}.csv`;
 
     useEffect(() => {
@@ -43,14 +46,19 @@ function AdminWorldNewsList() {
                 `${news_api_url}/api/worldnews_admin?page=${page}&search=${search}`,
                 { headers: { 'x-auth-token': token } }
             );
+            setLoading(true);
             setArticles(res.data.articles);
             setTotalPages(res.data.pages || 1); // fallback to 1 if undefined
         } catch (error) {
             console.error('Error fetching admin news:', error);
+            setError(`Error fetching admin news: ${error}`);
             if (error.response && error.response.status === 403) {
                 alert('Access denied. Admins only.');
                 navigate('/login');
             }
+        }
+        finally {
+            setLoading(false);
         }
     }
 
@@ -64,6 +72,7 @@ function AdminWorldNewsList() {
             fetchAdminNews();
         } catch (error) {
             console.error('Error deleting article:', error);
+            setError(`Error deleting article: ${error}`);
             alert('Error deleting article');
         }
     }
@@ -91,6 +100,7 @@ function AdminWorldNewsList() {
             fetchAdminNews();
         } catch (error) {
             console.error('Error updating article:', error);
+            setError(`Error updating article: ${error}`);
             alert('Error updating article');
         }
     }
@@ -108,7 +118,8 @@ function AdminWorldNewsList() {
     const handleReadFullArticle = (url) => {
         window.open(url, '_blank');
     };
-
+    if(loading) return <Spinner/>;
+    if(error) return <div className="error-msg">{error}</div>
     return (
         <div style={{ padding: '1rem' }}>
             <h1>Admin - World News Articles</h1>
