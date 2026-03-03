@@ -16,7 +16,7 @@ function NewsList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const query = useQuery();
-    const category = query.get('category') || 'general';
+    const category = query.get('category');
     const country = query.get('country');
     const source = query.get('source');
     const language = query.get('language') || 'en';
@@ -27,16 +27,24 @@ function NewsList() {
                 //let url = `${news_api_url}/api/news?category=${category}`;
                 //let url = `${news_api_url}/api/newsdata?category=${category}`;
                 //let url = `${news_api_url}/api/newsdatahub?category=${category}`;
-                let url = `${news_api_url}/api/worldnews?category=${category}`;
+                let url = `${news_api_url}/api/worldnews?`;
+
+                if (category) {
+                    url += `category=${category}&`;
+                }
                 if (country) {
-                    url += `&country=${country}`;
+                    url += `country=${country}&`;
                 }
                 if (source) {
-                    url += `&source=${source}`;
+                    url += `source=${source}&`;
                 }
                 if (language) {
-                    url += `&language=${language}`;
+                    url += `language=${language}&`;
                 }
+
+                // Remove trailing '&' if needed
+                url = url.slice(0, -1);
+
                 setLoading(true);
                 const res = await axios.get(url);
                 setArticles(res.data);
@@ -55,7 +63,7 @@ function NewsList() {
     if(error) return <div className="error-msg">{error}</div>
     return (
         <div style={{ padding: '1rem' }}>
-            <h1>{category.charAt(0).toUpperCase() + category.slice(1)} News</h1>
+            <h1>{(category ? category.charAt(0).toUpperCase() + category.slice(1) : 'News')}</h1>
             {articles.length === 0 ? (
                 <p>No articles available.</p>
             ) : (

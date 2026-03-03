@@ -151,3 +151,11 @@
     gap: 0.5rem;
     margin-top: 1rem;
 }
+
+.article-date {
+    font-size: 0.85rem;
+    color: #999;
+    font-style: italic;
+    margin-top: 0.25rem;
+}
+

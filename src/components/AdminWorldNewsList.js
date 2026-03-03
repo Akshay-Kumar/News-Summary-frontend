@@ -171,6 +171,7 @@ function AdminWorldNewsList() {
                     <ArticleCard
                         key={article._id}
                         image={article.urlToImage}
+                        publishedAt={article.publishedAt}
                         title={
                             editId === article._id ? (
                                 <input

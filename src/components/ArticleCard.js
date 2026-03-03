@@ -11,6 +11,7 @@ const ArticleCard = ({
                          bookmarked,
                          sourceName,
                          sourceIcon,
+                         publishedAt,
                          hideBookmark,
                          bottomRightButtons
                      }) => {
@@ -21,6 +22,15 @@ const ArticleCard = ({
                 <div className="header">
                     <h2 className="article-title">{title}</h2>
                 </div>
+                {publishedAt && (
+                    <p className="article-date">
+                        {new Date(publishedAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        })}
+                    </p>
+                )}
                 <p className="article-summary">{summary}</p>
                 <div className="button-container">
                     {(sourceName || sourceIcon) && (

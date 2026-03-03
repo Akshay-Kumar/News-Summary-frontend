@@ -16,6 +16,17 @@ function ArticleModal({ article, onClose, onReadFullArticle }) {
         <div className="modal-overlay" onClick={handleOverlayClick}>
             <div className="modal-content">
                 <h2>{article.title}</h2>
+                {/* Published date below the title */}
+                {article.publishedAt && (
+                    <p className="modal-date">
+                        Published on{' '}
+                        {new Date(article.publishedAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        })}
+                    </p>
+                )}
                 {article.urlToImage && (
                     <img src={article.urlToImage} alt={article.title} />
                 )}
