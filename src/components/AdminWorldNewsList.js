@@ -25,6 +25,7 @@ function AdminWorldNewsList() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [pageInput, setPageInput] = useState("1");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
     const csvFileName = `worldnews_articles_${new Date().toISOString().replace(/[:.]/g, '-')}.csv`;
 
     useEffect(() => {
@@ -37,8 +38,16 @@ function AdminWorldNewsList() {
     }, [navigate]);
 
     useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [search]);
+
+    useEffect(() => {
         fetchAdminNews();
-    }, [page, search]);
+    }, [debouncedSearch, page]);
 
     useEffect(() => {
         setPageInput(String(page)); // keep input in sync when user clicks Prev/Next
@@ -53,24 +62,38 @@ function AdminWorldNewsList() {
     };
 
     async function fetchAdminNews() {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
+
         setLoading(true);
+        setError(null);
+
         try {
-            const res = await axios.get(
-                `${news_api_url}/api/worldnews_admin?page=${page}&search=${search}`,
-                { headers: { 'x-auth-token': token } }
-            );
-            setArticles(res.data.articles);
-            setTotalPages(res.data.pages || 1); // fallback to 1 if undefined
+            const res = await axios.get(`${news_api_url}/api/worldnews_admin`, {
+                headers: { "x-auth-token": token },
+                params: {
+                    page: page,
+                    search: search || ""
+                }
+            });
+
+            setArticles(res.data.articles || []);
+            setTotalPages(res.data.pages || 1);
+
         } catch (error) {
-            console.error('Error fetching admin news:', error);
-            setError(`Error fetching admin news: ${error}`);
-            if (error.response && error.response.status === 403) {
-                alert('Access denied. Admins only.');
-                navigate('/login');
+
+            const errorMessage =
+                error.response?.data?.message || error.message || "Unknown error";
+
+            console.error("Error fetching admin news:", error);
+
+            setError(`Error fetching admin news: ${errorMessage}`);
+
+            if (error.response?.status === 403) {
+                alert("Access denied. Admins only.");
+                navigate("/login");
             }
-        }
-        finally {
+
+        } finally {
             setLoading(false);
         }
     }
