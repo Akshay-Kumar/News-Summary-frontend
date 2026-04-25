@@ -1,0 +1,73 @@
+services:
+
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+
+      # 🔥 redirect HTTP → HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: news-frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`news.${DOMAIN}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+
+      # 🔥 REQUIRED
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: news-backend
+
+    env_file:
+      - .env
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.${DOMAIN}`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+
+      # 🔥 REQUIRED
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"
+
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6
+    container_name: news-mongo
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

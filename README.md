@@ -141,6 +141,8 @@ Create `.env`:
 ```
 PORT=3030
 REACT_APP_API_URL=http://localhost:8000
+# or in case of nginx use
+# REACT_APP_API_URL=https://api.yourdomain.com
 ```
 
 ## **4. Run the Frontend**
