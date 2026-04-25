@@ -78,8 +78,6 @@ server {
 ## **3. Docker Compose**
 
 ```yaml
-version: "3.9"
-
 services:
   frontend:
     build: .
