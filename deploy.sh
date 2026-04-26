@@ -78,14 +78,14 @@ echo "⏳ Waiting for services..."
 sleep 10
 
 echo "🔍 Checking backend..."
-if curl -s https://api.${DOMAIN} > /dev/null; then
+if curl -k -s https://api.${DOMAIN} > /dev/null; then
   echo "✅ Backend is reachable"
 else
   echo "⚠️ Backend not reachable yet (SSL may still be provisioning)"
 fi
 
 echo "🔍 Checking frontend..."
-if curl -s https://news.${DOMAIN} > /dev/null; then
+if curl -k -s https://news.${DOMAIN} > /dev/null; then
   echo "✅ Frontend is reachable"
 else
   echo "⚠️ Frontend not reachable yet"
