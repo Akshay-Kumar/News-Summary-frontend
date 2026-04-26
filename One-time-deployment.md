@@ -59,6 +59,11 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\deploy.ps1
+```
+
 ## **3. Access your Application**
 
 Frontend:
