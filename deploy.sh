@@ -43,7 +43,7 @@ EMAIL=your@email.com
 MONGO_URI=mongodb://mongo:27017/newsdb
 WORLDNEWS_API_KEYS=key1,key2,key3
 JWT_SECRET=supersecret
-PORT=5000
+PORT=5001
 EOF
 
   echo "⚠️ Please update .env with real values before re-running"
