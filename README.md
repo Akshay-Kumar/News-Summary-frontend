@@ -83,7 +83,7 @@ services:
     build: .
     container_name: news-frontend
     ports:
-      - "8080:80"
+      - "80:80"
     restart: unless-stopped
 ```
 
