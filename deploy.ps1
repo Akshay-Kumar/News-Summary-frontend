@@ -1,10 +1,10 @@
-Write-Host " Production deployment starting..."
+Write-Host "Starting deployment..."
 
 # -------------------------------
 # 1. Check prerequisites
 # -------------------------------
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
-    Write-Host " Docker not installed"
+    Write-Host "ERROR: Docker not installed"
     exit 1
 }
 
@@ -12,20 +12,20 @@ if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
 # 2. Clone or update repos
 # -------------------------------
 if (!(Test-Path "frontend")) {
-    Write-Host " Cloning frontend..."
+    Write-Host "Cloning frontend..."
     git clone https://github.com/Akshay-Kumar/News-Summary-frontend.git frontend
 } else {
-    Write-Host " Updating frontend..."
+    Write-Host "Updating frontend..."
     cd frontend
     git pull
     cd ..
 }
 
 if (!(Test-Path "backend")) {
-    Write-Host " Cloning backend..."
+    Write-Host "Cloning backend..."
     git clone https://github.com/Akshay-Kumar/News-Summary.git backend
 } else {
-    Write-Host " Updating backend..."
+    Write-Host "Updating backend..."
     cd backend
     git pull
     cd ..
@@ -35,31 +35,41 @@ if (!(Test-Path "backend")) {
 # 3. Ensure root .env exists
 # -------------------------------
 if (!(Test-Path ".env")) {
-    Write-Host " Creating .env file..."
+    Write-Host "Creating .env file..."
 
-    @"
-DOMAIN=beast-x.xyz
-EMAIL=akshay.singh@dal.ca
-
-MONGO_URI=mongodb://mongo:27017/newsdb
-WORLDNEWS_API_KEYS=fe4cf09e390943b89af167224346ede7,aa327275a7c542e293886b4c105feca5,c706ca824fda48848220ae38aaf47582,71b8ddf9faba4f01b0103fd679943d63
-JWT_SECRET=supersecret3302
-PORT=5001
+@"
+FRONTEND_URL=news.beast-x.xyz
+BACKEND_URL=api.beast-x.xyz
+FRONTEND_PORT=3001
+BACKEND_PORT=5001
+MONGO_PORT=27018
 "@ | Out-File -Encoding utf8 .env
 
-    Write-Host " Please update .env with real values before re-running"
+    Write-Host "Please update .env with real values before re-running"
     exit 1
 }
 
-if ($env:DOMAIN -eq "yourdomain.com") {
-    Write-Host " Please update DOMAIN in .env before running"
+if (!(Test-Path "backend.env")) {
+    Write-Host "Creating backend.env file..."
+
+@"
+MONGO_URI=mongodb://mongo:27018/newsdb
+WORLDNEWS_API_KEYS=key1,key2,key3,key4
+JWT_SECRET=supersecret
+"@ | Out-File -Encoding utf8 backend.env
+
+    Write-Host "Please update backend.env with real values before re-running"
     exit 1
 }
 
-# Load env variables
+# -------------------------------
+# 4. Load env variables safely
+# -------------------------------
+Write-Host "Loading .env..."
+
 Get-Content .env | ForEach-Object {
-    if ($_ -match "^\s*$") { return }   # skip empty lines
-    if ($_ -match "^\s*#") { return }   # skip comments
+    if ($_ -match "^\s*$") { return }
+    if ($_ -match "^\s*#") { return }
     if ($_ -match "^(.*?)=(.*)$") {
         $name = $matches[1].Trim()
         $value = $matches[2].Trim()
@@ -67,60 +77,75 @@ Get-Content .env | ForEach-Object {
     }
 }
 
-# -------------------------------
-# 4. Configure frontend env
-# -------------------------------
-Write-Host " Setting frontend API URL..."
-"REACT_APP_API_URL=https://api.$($env:DOMAIN)" | Out-File -Encoding utf8 frontend\.env
+# Defaults (fallback)
+if (-not $env:FRONTEND_PORT) { $env:FRONTEND_PORT = "3001" }
+if (-not $env:BACKEND_PORT) { $env:BACKEND_PORT = "5001" }
 
+if (-not $env:FRONTEND_URL) {
+    Write-Host "ERROR: FRONTEND_URL not set in .env"
+    exit 1
+}
 
-# -------------------------------
-# 5. Checking Docker engine
-# -------------------------------
-Write-Host " Checking Docker engine..."
-
-try {
-    docker info | Out-Null
-    Write-Host " Docker engine is running"
-} catch {
-    Write-Host " Docker engine not running or not reachable"
-    Write-Host " Please start Docker Desktop and try again"
+if (-not $env:BACKEND_URL) {
+    Write-Host "ERROR: BACKEND_URL not set in .env"
     exit 1
 }
 
 # -------------------------------
-# 6. Start containers
+# 5. Configure frontend env
 # -------------------------------
-Write-Host " Starting containers..."
-docker compose down
+Write-Host "Setting frontend API URL..."
+"REACT_APP_API_URL=$($env:BACKEND_URL)" | Out-File -Encoding utf8 frontend\.env
+
+# -------------------------------
+# 6. Check Docker engine
+# -------------------------------
+Write-Host "Checking Docker engine..."
+
+try {
+    docker info | Out-Null
+    Write-Host "Docker engine is running"
+} catch {
+    Write-Host "ERROR: Docker not running. Start Docker Desktop."
+    exit 1
+}
+
+# -------------------------------
+# 7. Start containers
+# -------------------------------
+Write-Host "Starting containers..."
+
+docker compose down -v --remove-orphans
 docker compose up -d --build
 
 # -------------------------------
-# 7. Wait + check
+# 8. Wait + health check
 # -------------------------------
-Write-Host " Waiting for services..."
+Write-Host "Waiting for services..."
 Start-Sleep -Seconds 10
 
-Write-Host " Checking backend..."
+# Backend check
+Write-Host "Checking backend..."
 try {
-    Invoke-WebRequest -Uri "https://api.$($env:DOMAIN)" -UseBasicParsing | Out-Null
-    Write-Host " Backend is reachable"
+    Invoke-WebRequest -Uri "$($env:BACKEND_URL)/api/worldnews" -UseBasicParsing | Out-Null
+    Write-Host "Backend is reachable"
 } catch {
-    Write-Host " Backend not reachable yet (SSL may still be provisioning)"
+    Write-Host "Backend not reachable yet"
 }
 
-Write-Host " Checking frontend..."
+# Frontend check
+Write-Host "Checking frontend..."
 try {
-    Invoke-WebRequest -Uri "https://news.$($env:DOMAIN)" -UseBasicParsing | Out-Null
-    Write-Host " Frontend is reachable"
+    Invoke-WebRequest -Uri "$($env:FRONTEND_URL)" -UseBasicParsing | Out-Null
+    Write-Host "Frontend is reachable"
 } catch {
-    Write-Host " Frontend not reachable yet"
+    Write-Host "Frontend not reachable yet"
 }
 
 # -------------------------------
-# 8. Done
+# 9. Done
 # -------------------------------
 Write-Host ""
-Write-Host " Deployment complete!"
-Write-Host " Frontend: https://news.$($env:DOMAIN)"
-Write-Host " Backend:  https://api.$($env:DOMAIN)/docs"
+Write-Host "Deployment complete!"
+Write-Host "Frontend: $($env:FRONTEND_URL)"
+Write-Host "Backend: $($env:BACKEND_URL)"

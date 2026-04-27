@@ -1,32 +1,41 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Production deployment starting..."
+echo "Deployment starting..."
 
 # -------------------------------
 # 1. Check prerequisites
 # -------------------------------
 if ! command -v docker &> /dev/null; then
-  echo "❌ Docker not installed"
+  echo "ERROR: Docker not installed"
   exit 1
 fi
+
+# Detect compose command
+if docker compose version &> /dev/null; then
+  COMPOSE_CMD="docker compose"
+else
+  COMPOSE_CMD="docker-compose"
+fi
+
+echo "Using: $COMPOSE_CMD"
 
 # -------------------------------
 # 2. Clone or update repos
 # -------------------------------
 if [ ! -d frontend ]; then
-  echo "📦 Cloning frontend..."
+  echo "Cloning frontend..."
   git clone https://github.com/Akshay-Kumar/News-Summary-frontend.git frontend
 else
-  echo "🔄 Updating frontend..."
+  echo "Updating frontend..."
   cd frontend && git pull && cd ..
 fi
 
 if [ ! -d backend ]; then
-  echo "📦 Cloning backend..."
+  echo "Cloning backend..."
   git clone https://github.com/Akshay-Kumar/News-Summary.git backend
 else
-  echo "🔄 Updating backend..."
+  echo "Updating backend..."
   cd backend && git pull && cd ..
 fi
 
@@ -34,67 +43,100 @@ fi
 # 3. Ensure root .env exists
 # -------------------------------
 if [ ! -f ".env" ]; then
-  echo "⚙️ Creating .env file..."
+  echo "Creating .env file..."
 
   cat <<EOF > .env
-DOMAIN=yourdomain.com
-EMAIL=your@email.com
-
-MONGO_URI=mongodb://mongo:27017/newsdb
-WORLDNEWS_API_KEYS=key1,key2,key3
-JWT_SECRET=supersecret
-PORT=5001
+FRONTEND_URL=rp-news.beast-x.xyz
+BACKEND_URL=rp-api.beast-x.xyz
+FRONTEND_PORT=3001
+BACKEND_PORT=5001
+MONGO_PORT=27018
 EOF
 
-  echo "⚠️ Please update .env with real values before re-running"
+  echo "Please update .env before re-running"
   exit 1
 fi
 
-# Load env
-export $(grep -v '^#' .env | xargs)
+if [ ! -f "backend.env" ]; then
+  echo "Creating backend.env file..."
+
+  cat <<EOF > backend.env
+MONGO_URI=mongodb://mongo:27017/newsdb
+WORLDNEWS_API_KEYS=key1,key2,key3,key4
+JWT_SECRET=supersecret
+EOF
+
+  echo "Please update backend.env before re-running"
+  exit 1
+fi
 
 # -------------------------------
-# 4. Configure frontend env
+# 4. Load env safely
 # -------------------------------
-echo "⚙️ Setting frontend API URL..."
-echo "REACT_APP_API_URL=https://api.${DOMAIN}" > frontend/.env
+echo "Loading .env..."
+
+sed -i '1s/^\xEF\xBB\xBF//' .env || true
+
+set -a
+source .env
+set +a
+
+# Validate FRONTEND_URL
+if [ -z "$FRONTEND_URL" ]; then
+  echo "ERROR: FRONTEND_URL not set in .env"
+  exit 1
+fi
+
+# Validate BACKEND_URL
+if [ -z "$BACKEND_URL" ]; then
+  echo "ERROR: BACKEND_URL not set in .env"
+  exit 1
+fi
 
 # -------------------------------
-# 5. Fix permissions (TrueNAS safe)
+# 5. Configure frontend env
 # -------------------------------
-chmod -R 755 frontend backend || true
+echo "Setting frontend API URL..."
+printf "REACT_APP_API_URL=%s" "$BACKEND_URL" > frontend/.env
 
 # -------------------------------
 # 6. Start containers
 # -------------------------------
-echo "🐳 Starting containers..."
-docker compose down || true
-docker compose up -d --build
+echo "Starting containers..."
+$COMPOSE_CMD down -v --remove-orphans || true
+$COMPOSE_CMD up -d --build
 
 # -------------------------------
-# 7. Wait + check
+# 7. Wait + health check
 # -------------------------------
-echo "⏳ Waiting for services..."
-sleep 10
+echo "Waiting for backend..."
+for i in {1..10}; do
+  if curl -k -s ${BACKEND_URL} > /dev/null; then
+    echo "Backend is reachable"
+    break
+  fi
+  echo "Waiting... ($i/10)"
+  sleep 3
+done
 
-echo "🔍 Checking backend..."
-if curl -k -s https://api.${DOMAIN} > /dev/null; then
-  echo "✅ Backend is reachable"
+echo "Checking backend..."
+if curl -k -s ${BACKEND_URL}/api/worldnews > /dev/null; then
+  echo "Backend is reachable"
 else
-  echo "⚠️ Backend not reachable yet (SSL may still be provisioning)"
+  echo "Backend not reachable yet"
 fi
 
-echo "🔍 Checking frontend..."
-if curl -k -s https://news.${DOMAIN} > /dev/null; then
-  echo "✅ Frontend is reachable"
+echo "Checking frontend..."
+if curl -k -s --max-time 5 ${FRONTEND_URL} > /dev/null; then
+  echo "Frontend is reachable"
 else
-  echo "⚠️ Frontend not reachable yet"
+  echo "Frontend not reachable yet"
 fi
 
 # -------------------------------
 # 8. Done
 # -------------------------------
 echo ""
-echo "🎉 Deployment complete!"
-echo "🌐 Frontend: https://news.${DOMAIN}"
-echo "🔧 Backend:  https://api.${DOMAIN}/docs"
+echo "Deployment complete!"
+echo "Frontend: ${FRONTEND_URL}"
+echo "Backend:  ${BACKEND_URL}"
