@@ -57,18 +57,19 @@ CMD ["nginx", "-g", "daemon off;"]
 server {
     listen 80;
 
-    location / {
-        root /usr/share/nginx/html;
-        index index.html;
+    root /usr/share/nginx/html;
+    index index.html;
 
-        # Fix React routing (prevents 404 on refresh/logout)
-        try_files $uri /index.html;
+    # ✅ Fix XML serving
+    location ~* \.xml$ {
+        try_files $uri =404;
+        default_type application/xml;
+        add_header Content-Type application/xml;
     }
 
-    # Allow XML files (fixes 403 issue)
-    location ~* \.xml$ {
-        allow all;
-        default_type application/xml;
+    # ✅ React SPA fallback (keep LAST)
+    location / {
+        try_files $uri /index.html;
     }
 }
 ```
