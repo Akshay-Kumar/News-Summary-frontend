@@ -115,7 +115,9 @@ try {
 # -------------------------------
 Write-Host "Starting containers..."
 
-docker compose down -v --remove-orphans
+# docker compose down --remove-orphans
+# docker compose up -d --build
+docker compose pull
 docker compose up -d --build
 
 # -------------------------------

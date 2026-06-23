@@ -103,7 +103,9 @@ printf "REACT_APP_API_URL=%s" "$BACKEND_URL" > frontend/.env
 # 6. Start containers
 # -------------------------------
 echo "Starting containers..."
-$COMPOSE_CMD down -v --remove-orphans || true
+# $COMPOSE_CMD down --remove-orphans || true
+# $COMPOSE_CMD up -d --build
+$COMPOSE_CMD pull
 $COMPOSE_CMD up -d --build
 
 # -------------------------------
