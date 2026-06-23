@@ -46,8 +46,8 @@ if [ ! -f ".env" ]; then
   echo "Creating .env file..."
 
   cat <<EOF > .env
-FRONTEND_URL=rp-news.beast-x.xyz
-BACKEND_URL=rp-api.beast-x.xyz
+FRONTEND_URL=https://news.beast-x.xyz
+BACKEND_URL=https://api.beast-x.xyz
 FRONTEND_PORT=3001
 BACKEND_PORT=5001
 MONGO_PORT=27018
@@ -61,9 +61,9 @@ if [ ! -f "backend.env" ]; then
   echo "Creating backend.env file..."
 
   cat <<EOF > backend.env
-MONGO_URI=mongodb://mongo:27017/newsdb
+MONGO_URI=mongodb://mongo:27017/news-summary
 WORLDNEWS_API_KEYS=key1,key2,key3,key4
-JWT_SECRET=supersecret
+JWT_SECRET=secret
 EOF
 
   echo "Please update backend.env before re-running"
